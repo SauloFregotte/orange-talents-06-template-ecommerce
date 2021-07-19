@@ -22,7 +22,7 @@ public class CadastraUsuarioTest {
     public void cadastrarUsuarioComSucesso() throws Exception {
         URI uri = new URI("/cadastrar-usuario");
         String json = "{\n" +
-                "    \"email\":\"lulo123@gmail.com\",\n" +
+                "    \"email\":\"triste123@gmail.com\",\n" +
                 "    \"senha\":\"123456\"\n" +
                 "}";
 
@@ -36,21 +36,27 @@ public class CadastraUsuarioTest {
                         .is(200));
     }
 
-//    @Test
-//    public void cadastrarUsuarioEmailDuplicado() throws Exception {
-//        URI uri = new URI("/cadastrar-usuario");
-//        String json = "{\n" +
-//                "    \"email\":\"lulo123@gmail.com\",\n" +
-//                "    \"senha\":\"123456\"\n" +
-//                "}";
-//
-//        mockMvc
-//                .perform(MockMvcRequestBuilders
-//                        .post(uri)
-//                        .content(json)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers
-//                        .status()
-//                        .is(400));
-//    }
+    @Test
+    public void cadastrarUsuarioEmailDuplicado() throws Exception {
+        URI uri = new URI("/cadastrar-usuario");
+        String json = "{\n" +
+                "    \"email\":\"lulo123@gmail.com\",\n" +
+                "    \"senha\":\"123456\"\n" +
+                "}";
+
+        mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post(uri)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        mockMvc
+                .perform(MockMvcRequestBuilders
+                    .post(uri)
+                    .content(json)
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers
+                        .status()
+                        .is(400));
+    }
 }
