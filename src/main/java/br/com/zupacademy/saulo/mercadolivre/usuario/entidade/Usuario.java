@@ -4,10 +4,11 @@ import br.com.zupacademy.saulo.mercadolivre.security.PerfilDeAcesso;
 import br.com.zupacademy.saulo.mercadolivre.usuario.RepositoryUsuarioJPA;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,10 +27,13 @@ public class Usuario implements UserDetails {
     private static final java.util.regex.Pattern pattern = Pattern.compile(EMAIL_REGEX_ISO);
 
     private static boolean validarFormatoEmail(final String email){
+        Objects.requireNonNull(email, "Email não pode ser nulo!");
         return pattern.matcher(email).find();
     }
 
     public Usuario(final String email, final String senha) {
+        if(senha.equals("")) throw new IllegalArgumentException("Senha não pode ser vazia!");
+        Objects.requireNonNull(senha, "Senha não pode ser nula!");
         if(!validarFormatoEmail(email)) throw new IllegalArgumentException("Email não tem formato valido!");
         this.email = email;
         this.senha = senha;

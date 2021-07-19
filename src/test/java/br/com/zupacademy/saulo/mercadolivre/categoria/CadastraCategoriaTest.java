@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre;
+package br.com.zupacademy.saulo.mercadolivre.categoria;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +13,17 @@ import java.net.URI;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CadastraUsuarioTest {
+public class CadastraCategoriaTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void cadastrarUsuarioComSucesso() throws Exception {
-        URI uri = new URI("/cadastrar-usuario");
+    public void cadastrarCategoriaComMaeComSucesso() throws Exception {
+        URI uri = new URI("/cadastrar-categoria");
         String json = "{\n" +
-                "    \"email\":\"triste123@gmail.com\",\n" +
-                "    \"senha\":\"123456\"\n" +
+                "    \"nome\":\"Placa-Mãe\",\n" +
+                "    \"nomeCategoriaMae\":\"Hardware\"\n" +
                 "}";
 
         mockMvc
@@ -37,11 +37,29 @@ public class CadastraUsuarioTest {
     }
 
     @Test
-    public void cadastrarUsuarioEmailDuplicado() throws Exception {
-        URI uri = new URI("/cadastrar-usuario");
+    public void cadastrarCategoriaSemMaeComSucesso() throws Exception {
+        URI uri = new URI("/cadastrar-categoria");
         String json = "{\n" +
-                "    \"email\":\"lulo123@gmail.com\",\n" +
-                "    \"senha\":\"123456\"\n" +
+                "    \"nome\":\"Eletrônicos\",\n" +
+                "    \"nomeCategoriaMae\":\"\"\n" +
+                "}";
+
+        mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post(uri)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers
+                        .status()
+                        .is(200));
+    }
+
+    @Test
+    public void cadastrarCategoriaJaExistente() throws Exception {
+        URI uri = new URI("/cadastrar-categoria");
+        String json = "{\n" +
+                "    \"nome\":\"Eletrônicos\",\n" +
+                "    \"nomeCategoriaMae\":\"\"\n" +
                 "}";
 
         mockMvc
@@ -49,12 +67,11 @@ public class CadastraUsuarioTest {
                         .post(uri)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON));
-
         mockMvc
                 .perform(MockMvcRequestBuilders
-                    .post(uri)
-                    .content(json)
-                    .contentType(MediaType.APPLICATION_JSON))
+                        .post(uri)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .is(400));

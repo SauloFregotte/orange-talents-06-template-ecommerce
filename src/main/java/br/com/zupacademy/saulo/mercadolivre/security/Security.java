@@ -29,7 +29,8 @@ public class Security extends WebSecurityConfigurerAdapter {
          * onde eu defino que não devem ser criadas sessões
          * **/
         http.authorizeRequests()
-        .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
+                .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
+                .antMatchers(HttpMethod.POST, "/cadastrar-categoria").permitAll()
                 .anyRequest()
                 .authenticated()
         .and()
