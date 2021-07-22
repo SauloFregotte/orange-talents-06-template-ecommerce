@@ -45,6 +45,10 @@ public class Security extends WebSecurityConfigurerAdapter {
          * que vai contra os princípios da arquitetura Rest (StateLess), logo foi trocado pelo método
          * sessionCreationPolicy(SessionCreationPolicy.STATELESS),
          * onde eu defino que não devem ser criadas sessões
+         *
+         * Lembrar de tirar os end-points do metodo abaixo,
+         * pois estou deixando eles publicos para acesso,
+         * invalidando assim a razao de ter feito o token de acesso.
          * **/
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
