@@ -1,11 +1,8 @@
 package br.com.zupacademy.saulo.mercadolivre.usuario;
 
-import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import javax.validation.Valid;
 
 public class UsuarioTest {
 

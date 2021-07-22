@@ -1,6 +1,7 @@
 package br.com.zupacademy.saulo.mercadolivre;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,6 +53,12 @@ public class Advice {
     @ExceptionHandler({EntityExistsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RespostaErro entityAlreadyExists(EntityExistsException e){
+        return new RespostaErro(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ExceptionHandler({UsernameNotFoundException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RespostaErro invalidUsername(UsernameNotFoundException e){
         return new RespostaErro(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
 

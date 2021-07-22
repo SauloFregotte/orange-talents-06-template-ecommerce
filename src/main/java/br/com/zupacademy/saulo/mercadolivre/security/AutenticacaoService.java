@@ -16,8 +16,9 @@ public class AutenticacaoService implements UserDetailsService {
     private RepositoryUsuarioJPA repositoryUsuarioJPA;
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return repositoryUsuarioJPA.findByEmail(s)
-                .orElseThrow(()->{throw new UsernameNotFoundException("Dados inválidos!");});
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("BUSCO USUARIO COMPATIVEL");
+        return repositoryUsuarioJPA.findFirstUsuarioByEmail(username)
+                .orElseThrow(()->{throw new UsernameNotFoundException("Usuário ou senha incorretos!");});
     }
 }
