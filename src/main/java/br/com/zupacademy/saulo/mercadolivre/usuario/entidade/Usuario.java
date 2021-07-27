@@ -58,7 +58,7 @@ public class Usuario implements UserDetails {
     private String senha;
 
     @NotNull
-    private LocalDateTime localDateTime = LocalDateTime.now();
+    private final LocalDateTime localDateTime = LocalDateTime.now();
 
     public Usuario cadastrar(RepositoryUsuarioJPA repositoryUsuarioJPA){
         verifyIfEmailIsUnique(repositoryUsuarioJPA);

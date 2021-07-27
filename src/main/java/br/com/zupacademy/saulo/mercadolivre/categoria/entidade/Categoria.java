@@ -1,6 +1,7 @@
 package br.com.zupacademy.saulo.mercadolivre.categoria.entidade;
 
 import br.com.zupacademy.saulo.mercadolivre.categoria.RepositoryCategoriaJPA;
+import br.com.zupacademy.saulo.mercadolivre.produto.entidade.Produto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,11 @@ import java.util.Objects;
 
 @Entity
 public class Categoria {
+
+    public static Categoria verifyIfCategoriaExists(RepositoryCategoriaJPA repositoryCategoriaJPA, String nome) {
+        return repositoryCategoriaJPA.findFirstCategoriaByNome(nome)
+                .orElseThrow(() -> {throw new IllegalArgumentException("Categoria não existe!");});
+    }
 
     public Categoria(final String nome) {
         Objects.requireNonNull(nome, "Nome não pode ser nulo!");
@@ -29,6 +35,9 @@ public class Categoria {
 
     @ManyToOne
     private Categoria categoriaMae;
+
+    @OneToOne(mappedBy = "categoria", cascade = CascadeType.PERSIST)
+    private Produto produtos;
 
     /**
      * 1-verificar se o nome de categoria é único

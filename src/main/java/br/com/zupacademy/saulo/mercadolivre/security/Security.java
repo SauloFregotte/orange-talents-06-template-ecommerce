@@ -53,6 +53,7 @@ public class Security extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
                 .antMatchers(HttpMethod.POST, "/cadastrar-categoria").permitAll()
+                .antMatchers(HttpMethod.POST, "/cadastrar-produto/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .anyRequest()
                 .authenticated()

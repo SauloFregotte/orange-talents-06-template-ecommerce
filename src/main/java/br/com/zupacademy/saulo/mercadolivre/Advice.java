@@ -44,11 +44,11 @@ public class Advice {
         return new RespostaErro(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
 
-//    @ExceptionHandler({EntityException.class})
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public RespostaErro invalidEntityField(EntityException e){
-//        return new RespostaErro(e.getMessage(), HttpStatus.BAD_REQUEST.value());
-//    }
+    @ExceptionHandler({EntityException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RespostaErro invalidEntityField(EntityException e){
+        return new RespostaErro(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+    }
 
     @ExceptionHandler({EntityExistsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
