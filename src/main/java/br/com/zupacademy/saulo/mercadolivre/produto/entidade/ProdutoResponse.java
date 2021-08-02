@@ -2,6 +2,7 @@ package br.com.zupacademy.saulo.mercadolivre.produto.entidade;
 
 import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
 import br.com.zupacademy.saulo.mercadolivre.produto.caracteristicas.Caracteristicas;
+import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ public class ProdutoResponse {
         localDateTime = produto.getLocalDateTime();
         categoria = produto.getCategoria();
         caracteristicas = produto.getCaracteristicas();
+        usuario = produto.getUsuario();
     }
 
     private Long id;
@@ -28,6 +30,7 @@ public class ProdutoResponse {
 
     private Categoria categoria;
     private List<Caracteristicas> caracteristicas;
+    private Usuario usuario;
 
     public Long getId() {
         return id;
@@ -59,5 +62,9 @@ public class ProdutoResponse {
 
     public List<Caracteristicas> getCaracteristicas() {
         return caracteristicas;
+    }
+
+    public Long getUsuario() {
+        return usuario.getId();
     }
 }

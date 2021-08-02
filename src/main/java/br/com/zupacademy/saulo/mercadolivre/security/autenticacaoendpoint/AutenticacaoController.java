@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre.security;
+package br.com.zupacademy.saulo.mercadolivre.security.autenticacaoendpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth-login")
 public class AutenticacaoController {
 
     @Autowired

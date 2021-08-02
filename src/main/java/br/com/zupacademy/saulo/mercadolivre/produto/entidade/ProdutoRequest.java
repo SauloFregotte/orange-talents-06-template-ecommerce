@@ -4,6 +4,7 @@ import br.com.zupacademy.saulo.mercadolivre.categoria.RepositoryCategoriaJPA;
 import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
 import br.com.zupacademy.saulo.mercadolivre.produto.caracteristicas.Caracteristicas;
+import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -22,7 +23,8 @@ public class ProdutoRequest {
     private String categoria;
     private List<Caracteristicas> caracteristicas;
 
-    public ProdutoResponse cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA, final RepositoryCategoriaJPA repositoryCategoriaJPA){
+    public ProdutoResponse cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA, final RepositoryCategoriaJPA repositoryCategoriaJPA, final Usuario userLogged){
+
         return new ProdutoResponse(
                 Produto.builder()
                         .comNome(nome)
@@ -31,6 +33,7 @@ public class ProdutoRequest {
                         .comDescricao(descricao)
                         .comCategoria(Categoria.verifyIfCategoriaExists(repositoryCategoriaJPA, categoria))
                         .comCaracteristicas(caracteristicas)
+                        .comUsuario(userLogged)
                         .build()
                         .cadastrar(repositoryProdutoJPA)
         );

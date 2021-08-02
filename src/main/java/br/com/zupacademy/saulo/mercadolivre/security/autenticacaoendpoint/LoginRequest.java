@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre.security;
+package br.com.zupacademy.saulo.mercadolivre.security.autenticacaoendpoint;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 

@@ -1,5 +1,6 @@
 package br.com.zupacademy.saulo.mercadolivre.security;
 
+import br.com.zupacademy.saulo.mercadolivre.security.autenticacaoendpoint.TokenServices;
 import br.com.zupacademy.saulo.mercadolivre.usuario.RepositoryUsuarioJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,16 +20,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class Security extends WebSecurityConfigurerAdapter {
 
-    Security(final AutenticacaoService autenticacaoService){
+    Security(final AutenticacaoService autenticacaoService,
+             final TokenServices tokenServices,
+             final RepositoryUsuarioJPA repositoryUsuarioJPA){
+
         this.autenticacaoService = autenticacaoService;
+        this.tokenServices = tokenServices;
+        this.repositoryUsuarioJPA = repositoryUsuarioJPA;
     }
 
-    private AutenticacaoService autenticacaoService;
+    private final AutenticacaoService autenticacaoService;
 
-    @Autowired
-    private TokenServices tokenServices;
-    @Autowired
-    private RepositoryUsuarioJPA repositoryUsuarioJPA;
+    private final TokenServices tokenServices;
+
+    private final RepositoryUsuarioJPA repositoryUsuarioJPA;
 
     @Override
     @Bean
@@ -49,12 +54,12 @@ public class Security extends WebSecurityConfigurerAdapter {
          * Lembrar de tirar os end-points do metodo abaixo,
          * pois estou deixando eles publicos para acesso,
          * invalidando assim a razao de ter feito o token de acesso.
-         * **/
+         * */
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
-                .antMatchers(HttpMethod.POST, "/cadastrar-categoria").permitAll()
-                .antMatchers(HttpMethod.POST, "/cadastrar-produto/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/auth").permitAll()
+//                .antMatchers(HttpMethod.POST, "/cadastrar-categoria").permitAll()
+//                .antMatchers(HttpMethod.POST, "/cadastrar-produto/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth-login").permitAll()
                 .anyRequest()
                 .authenticated()
         .and()

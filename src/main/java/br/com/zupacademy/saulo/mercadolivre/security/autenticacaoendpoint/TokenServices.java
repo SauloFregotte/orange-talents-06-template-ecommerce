@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre.security;
+package br.com.zupacademy.saulo.mercadolivre.security.autenticacaoendpoint;
 
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 import io.jsonwebtoken.Jwts;
@@ -34,7 +34,7 @@ public class TokenServices {
     }
 
     public boolean isValid(String token) {
-        System.out.println(token);
+        System.out.println("TOKEN = " + token);
         System.out.println("VERIFICA SE TOKEN É VALIDO");
         try {
             Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
