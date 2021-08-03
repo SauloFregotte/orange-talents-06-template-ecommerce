@@ -70,6 +70,19 @@ public class Usuario implements UserDetails {
                 .ifPresent(e->{throw new EntityExistsException("Não é possivel salvar usuarios com email duplicado!");});
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(senha, usuario.senha) && Objects.equals(localDateTime, usuario.localDateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, senha, localDateTime);
+    }
+
     public Long getId() {
         return id;
     }

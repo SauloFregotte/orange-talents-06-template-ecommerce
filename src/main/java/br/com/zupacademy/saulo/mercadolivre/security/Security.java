@@ -53,12 +53,13 @@ public class Security extends WebSecurityConfigurerAdapter {
          *
          * Lembrar de tirar os end-points do metodo abaixo,
          * pois estou deixando eles publicos para acesso,
-         * invalidando assim a razao de ter feito o token de acesso.
+         * invalidando assim a razão de ter feito o token de acesso.
          * */
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
 //                .antMatchers(HttpMethod.POST, "/cadastrar-categoria").permitAll()
 //                .antMatchers(HttpMethod.POST, "/cadastrar-produto/**").permitAll()
+//                .antMatchers(HttpMethod.POST, "/cadastro-imagens/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth-login").permitAll()
                 .anyRequest()
                 .authenticated()

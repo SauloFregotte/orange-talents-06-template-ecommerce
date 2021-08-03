@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityExistsException;
 import javax.validation.ConstraintViolation;
@@ -60,6 +61,12 @@ public class Advice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RespostaErro invalidUsername(UsernameNotFoundException e){
         return new RespostaErro(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ExceptionHandler({ResponseStatusException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public RespostaErro invalidAccess(ResponseStatusException e) {
+        return new RespostaErro(e.getMessage(), HttpStatus.FORBIDDEN.value());
     }
 
 }

@@ -4,13 +4,16 @@ import br.com.zupacademy.saulo.mercadolivre.EntityException;
 import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
 import br.com.zupacademy.saulo.mercadolivre.produto.caracteristicas.Caracteristicas;
+import br.com.zupacademy.saulo.mercadolivre.produto.imagens.Imagem;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Entity
@@ -34,7 +37,7 @@ public class Produto {
                         carac ->
                                 new Caracteristicas(carac.getNome(),carac.getDescricao(),this))
                 .collect(Collectors.toList());
-        this.userLogged = builder.userLogged;
+        this.usuario = builder.userLogged;
     }
 
     public Produto() {
@@ -61,7 +64,10 @@ public class Produto {
 
     @NotNull
     @ManyToOne
-    private Usuario userLogged;
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private List<Imagem> listaImagens = new ArrayList<>();
 
     @NotNull
     @OneToOne
@@ -73,14 +79,15 @@ public class Produto {
     private List<Caracteristicas> caracteristicas;
 
     public Produto cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA){
-        verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(repositoryProdutoJPA);
+        if(this.id.equals(null))
+            verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(repositoryProdutoJPA);
         verifyMinimunCaracteristicas(caracteristicas);
         return repositoryProdutoJPA.save(this);
     }
 
     private void verifyMinimunCaracteristicas(List<Caracteristicas> caracteristicas){
         if(caracteristicas.size()< 3)
-            throw new EntityException("Não existem caracteristicas suficientes para este produto (min de 3)!");
+            throw new EntityException("Não existem características suficientes para este produto (min de 3)!");
     }
 
     private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA){
@@ -93,10 +100,39 @@ public class Produto {
                 )
                 .ifPresent(
                     e -> {
-                        throw new EntityException("Tentativa de inserir um produto exatemente igual a um já inserido anteriormente!");
+                        throw new EntityException(
+                                "Tentativa de inserir um produto exatemente igual (nome, valor, quantidade, descrição) a um já inserido anteriormente!"
+                        );
                     }
                 );
 
+    }
+
+    public void associarImagens(List<String> listaImagens) {
+        System.out.println(listaImagens);
+        this.listaImagens
+                .addAll(
+                        listaImagens
+                                .stream()
+                                .map(
+                                        imagemLinkString -> new Imagem(imagemLinkString, this)
+                                )
+                                .collect(Collectors.toList())
+                );
+        System.out.println(this.listaImagens.get(0).getLinkImagem());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Produto produto = (Produto) o;
+        return Double.compare(produto.valor, valor) == 0 && quantidade == produto.quantidade && Objects.equals(id, produto.id) && Objects.equals(nome, produto.nome) && Objects.equals(descricao, produto.descricao) && Objects.equals(localDateTime, produto.localDateTime) && Objects.equals(usuario, produto.usuario) && Objects.equals(listaImagens, produto.listaImagens) && Objects.equals(categoria, produto.categoria) && Objects.equals(caracteristicas, produto.caracteristicas);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, valor, quantidade, descricao, localDateTime, usuario, listaImagens, categoria, caracteristicas);
     }
 
     public static class Builder{
@@ -182,6 +218,10 @@ public class Produto {
     }
 
     public Usuario getUsuario() {
-        return userLogged;
+        return usuario;
+    }
+
+    public List<Imagem> getListaImagens() {
+        return listaImagens;
     }
 }
