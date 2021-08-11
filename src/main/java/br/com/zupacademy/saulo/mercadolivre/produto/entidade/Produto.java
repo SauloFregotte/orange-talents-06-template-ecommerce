@@ -86,8 +86,8 @@ public class Produto {
         /*Este If é necessario para o caso de vc estiver trazendo
           Entidades do banco e quiser altera-las,caso contrario teriamos
           uma verificação para updates*/
-//        if(this.id.equals(null))
-//            verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(repositoryProdutoJPA);
+        if(this.id == null)
+            verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(repositoryProdutoJPA);
         verifyMinimunCaracteristicas(caracteristicas);
         return repositoryProdutoJPA.save(this);
     }
@@ -98,25 +98,25 @@ public class Produto {
                     "para este produto (min de 3)!");
     }
 
-//    private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA){
-//        repositoryProdutoJPA
-//                .findFirstByNomeAndValorAndQuantidadeAndDescricao(
-//                        this.nome,
-//                        this.valor,
-//                        this.quantidade,
-//                        this.descricao
-//                )
-//                .ifPresent(
-//                    e -> {
-//                        throw new EntityException(
-//                                "Tentativa de inserir um produto exatemente igual " +
-//                                        "(nome, valor, quantidade, descrição) " +
-//                                        "a um já inserido anteriormente!"
-//                        );
-//                    }
-//                );
-//
-//    }
+    private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA){
+        repositoryProdutoJPA
+                .findFirstByNomeAndValorAndQuantidadeAndDescricao(
+                        this.nome,
+                        this.valor,
+                        this.quantidade,
+                        this.descricao
+                )
+                .ifPresent(
+                    e -> {
+                        throw new EntityException(
+                                "Tentativa de inserir um produto exatemente igual " +
+                                        "(nome, valor, quantidade, descrição) " +
+                                        "a um já inserido anteriormente!"
+                        );
+                    }
+                );
+
+    }
 
     public void associarImagens(List<String> listaImagens) {
         this.listaImagens
