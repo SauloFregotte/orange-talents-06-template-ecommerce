@@ -1,11 +1,10 @@
 package br.com.zupacademy.saulo.mercadolivre.produto.entidade;
 
-import br.com.zupacademy.saulo.mercadolivre.config.EntityException;
 import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
+import br.com.zupacademy.saulo.mercadolivre.config.EntityException;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
 import br.com.zupacademy.saulo.mercadolivre.produto.caracteristicas.Caracteristicas;
 import br.com.zupacademy.saulo.mercadolivre.produto.imagens.Imagem;
-import br.com.zupacademy.saulo.mercadolivre.opniao.entidade.Opniao;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 
 import javax.persistence.*;
@@ -63,12 +62,8 @@ public class Produto {
     @NotNull
     private final LocalDateTime localDateTime = LocalDateTime.now();
 
-
     @ManyToOne
     private Usuario usuario;
-
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
-    private final List<Imagem> listaImagens = new ArrayList<>();
 
     @NotNull
     @OneToOne
@@ -79,14 +74,14 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
     private List<Caracteristicas> caracteristicas;
 
-    @OneToMany(mappedBy = "produto")
-    private List<Opniao> opnioes;
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private final List<Imagem> listaImagens = new ArrayList<>();
 
     public Produto cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA) {
         /*Este If é necessario para o caso de vc estiver trazendo
           Entidades do banco e quiser altera-las,caso contrario teriamos
           uma verificação para updates*/
-        if(this.id == null)
+        if (this.id == null)
             verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(repositoryProdutoJPA);
         verifyMinimunCaracteristicas(caracteristicas);
         return repositoryProdutoJPA.save(this);
@@ -98,7 +93,7 @@ public class Produto {
                     "para este produto (min de 3)!");
     }
 
-    private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA){
+    private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA) {
         repositoryProdutoJPA
                 .findFirstByNomeAndValorAndQuantidadeAndDescricao(
                         this.nome,
@@ -107,13 +102,13 @@ public class Produto {
                         this.descricao
                 )
                 .ifPresent(
-                    e -> {
-                        throw new EntityException(
-                                "Tentativa de inserir um produto exatemente igual " +
-                                        "(nome, valor, quantidade, descrição) " +
-                                        "a um já inserido anteriormente!"
-                        );
-                    }
+                        e -> {
+                            throw new EntityException(
+                                    "Tentativa de inserir um produto exatemente igual " +
+                                            "(nome, valor, quantidade, descrição) " +
+                                            "a um já inserido anteriormente!"
+                            );
+                        }
                 );
 
     }
@@ -249,9 +244,5 @@ public class Produto {
 
     public List<Imagem> getListaImagens() {
         return listaImagens;
-    }
-
-    public List<Opniao> getOpnioes() {
-        return opnioes;
     }
 }

@@ -27,8 +27,6 @@ public class OpniaoController {
     public OpniaoResponse cadastroDeOpniao(@RequestBody @Valid final OpniaoRequest opniaoRequest,
                                            @PathVariable Long id,
                                            @AuthenticationPrincipal Usuario userLogged) {
-        /*Ideal seria fazer um repositoryProdutoJPA.getByIdAndUser(id, userLogged)
-          mas para seguir o desafio fiz assim e verifico dentro do request se pertence ao userLogged*/
         return opniaoRequest.associarOpniaoProduto(
                 repositoryOpniaoJPA,
                 userLogged,

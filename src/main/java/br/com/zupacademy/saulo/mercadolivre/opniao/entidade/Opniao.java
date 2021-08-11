@@ -5,7 +5,6 @@ import br.com.zupacademy.saulo.mercadolivre.produto.entidade.Produto;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Entity
