@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre;
+package br.com.zupacademy.saulo.mercadolivre.config;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityExistsException;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
@@ -30,13 +29,16 @@ public class Advice {
     @ExceptionHandler({ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RespostaErro invalidFormat(ConstraintViolationException e){
-        return new RespostaErro(
-                e.getConstraintViolations()
-                .stream()
-                .findFirst()
-                .map(ConstraintViolation::getMessageTemplate)
-                .orElse(e.getMessage()), HttpStatus.BAD_REQUEST.value()
-        );
+
+        return new RespostaErro(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+
+//        return new RespostaErro(
+//                e.getConstraintViolations()
+//                .stream()
+//                .findFirst()
+//                .map(ConstraintViolation::getMessageTemplate)
+//                .orElse(e.getMessage()), HttpStatus.BAD_REQUEST.value()
+//        );
     }
 
     @ExceptionHandler({IllegalArgumentException.class})

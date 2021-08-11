@@ -44,7 +44,8 @@ public class Categoria {
      * 2-verificar se a categoria mãe existe
      * 3-salvar
      * **/
-    public Categoria cadastrar(final RepositoryCategoriaJPA repositoryCategoriaJPA, final String nomeCategoriaMae){
+    public Categoria cadastrar(final RepositoryCategoriaJPA repositoryCategoriaJPA,
+                               final String nomeCategoriaMae){
         verifyIfNameIsUnique(repositoryCategoriaJPA);
         findCategoriaMae(nomeCategoriaMae, repositoryCategoriaJPA);
         return repositoryCategoriaJPA.save(this);
@@ -68,7 +69,9 @@ public class Categoria {
         return nome;
     }
 
-    public Categoria getCategoriaMae() {
-        return categoriaMae;
+    public String getCategoriaMae() {
+        if (categoriaMae == null)
+            return "";
+        return categoriaMae.getNome();
     }
 }

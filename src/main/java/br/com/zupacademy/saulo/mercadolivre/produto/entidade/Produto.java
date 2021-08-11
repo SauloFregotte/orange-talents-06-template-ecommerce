@@ -1,10 +1,11 @@
 package br.com.zupacademy.saulo.mercadolivre.produto.entidade;
 
-import br.com.zupacademy.saulo.mercadolivre.EntityException;
+import br.com.zupacademy.saulo.mercadolivre.config.EntityException;
 import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
 import br.com.zupacademy.saulo.mercadolivre.produto.caracteristicas.Caracteristicas;
 import br.com.zupacademy.saulo.mercadolivre.produto.imagens.Imagem;
+import br.com.zupacademy.saulo.mercadolivre.opniao.entidade.Opniao;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Produto {
 
-    public static Builder builder(){
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -35,7 +36,7 @@ public class Produto {
                 .stream()
                 .map(
                         carac ->
-                                new Caracteristicas(carac.getNome(),carac.getDescricao(),this))
+                                new Caracteristicas(carac.getNome(), carac.getDescricao(), this))
                 .collect(Collectors.toList());
         this.usuario = builder.userLogged;
     }
@@ -62,12 +63,12 @@ public class Produto {
     @NotNull
     private final LocalDateTime localDateTime = LocalDateTime.now();
 
-    @NotNull
+
     @ManyToOne
     private Usuario usuario;
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
-    private List<Imagem> listaImagens = new ArrayList<>();
+    private final List<Imagem> listaImagens = new ArrayList<>();
 
     @NotNull
     @OneToOne
@@ -78,38 +79,46 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
     private List<Caracteristicas> caracteristicas;
 
-    public Produto cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA){
-        if(this.id.equals(null))
-            verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(repositoryProdutoJPA);
+    @OneToMany(mappedBy = "produto")
+    private List<Opniao> opnioes;
+
+    public Produto cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA) {
+        /*Este If é necessario para o caso de vc estiver trazendo
+          Entidades do banco e quiser altera-las,caso contrario teriamos
+          uma verificação para updates*/
+//        if(this.id.equals(null))
+//            verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(repositoryProdutoJPA);
         verifyMinimunCaracteristicas(caracteristicas);
         return repositoryProdutoJPA.save(this);
     }
 
-    private void verifyMinimunCaracteristicas(List<Caracteristicas> caracteristicas){
-        if(caracteristicas.size()< 3)
-            throw new EntityException("Não existem características suficientes para este produto (min de 3)!");
+    private void verifyMinimunCaracteristicas(List<Caracteristicas> caracteristicas) {
+        if (caracteristicas.size() < 3)
+            throw new EntityException("Não existem características suficientes " +
+                    "para este produto (min de 3)!");
     }
 
-    private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA){
-        repositoryProdutoJPA
-                .findFirstByNomeAndValorAndQuantidadeAndDescricao(
-                        this.nome,
-                        this.valor,
-                        this.quantidade,
-                        this.descricao
-                )
-                .ifPresent(
-                    e -> {
-                        throw new EntityException(
-                                "Tentativa de inserir um produto exatemente igual (nome, valor, quantidade, descrição) a um já inserido anteriormente!"
-                        );
-                    }
-                );
-
-    }
+//    private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA){
+//        repositoryProdutoJPA
+//                .findFirstByNomeAndValorAndQuantidadeAndDescricao(
+//                        this.nome,
+//                        this.valor,
+//                        this.quantidade,
+//                        this.descricao
+//                )
+//                .ifPresent(
+//                    e -> {
+//                        throw new EntityException(
+//                                "Tentativa de inserir um produto exatemente igual " +
+//                                        "(nome, valor, quantidade, descrição) " +
+//                                        "a um já inserido anteriormente!"
+//                        );
+//                    }
+//                );
+//
+//    }
 
     public void associarImagens(List<String> listaImagens) {
-        System.out.println(listaImagens);
         this.listaImagens
                 .addAll(
                         listaImagens
@@ -119,7 +128,6 @@ public class Produto {
                                 )
                                 .collect(Collectors.toList())
                 );
-        System.out.println(this.listaImagens.get(0).getLinkImagem());
     }
 
     @Override
@@ -127,15 +135,33 @@ public class Produto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Produto produto = (Produto) o;
-        return Double.compare(produto.valor, valor) == 0 && quantidade == produto.quantidade && Objects.equals(id, produto.id) && Objects.equals(nome, produto.nome) && Objects.equals(descricao, produto.descricao) && Objects.equals(localDateTime, produto.localDateTime) && Objects.equals(usuario, produto.usuario) && Objects.equals(listaImagens, produto.listaImagens) && Objects.equals(categoria, produto.categoria) && Objects.equals(caracteristicas, produto.caracteristicas);
+        return Double.compare(produto.valor, valor) == 0 &&
+                quantidade == produto.quantidade &&
+                Objects.equals(id, produto.id) &&
+                Objects.equals(nome, produto.nome) &&
+                Objects.equals(descricao, produto.descricao) &&
+                Objects.equals(localDateTime, produto.localDateTime) &&
+                Objects.equals(usuario, produto.usuario) &&
+                Objects.equals(listaImagens, produto.listaImagens) &&
+                Objects.equals(categoria, produto.categoria) &&
+                Objects.equals(caracteristicas, produto.caracteristicas);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, valor, quantidade, descricao, localDateTime, usuario, listaImagens, categoria, caracteristicas);
+        return Objects.hash(id,
+                nome,
+                valor,
+                quantidade,
+                descricao,
+                localDateTime,
+                usuario,
+                listaImagens,
+                categoria,
+                caracteristicas);
     }
 
-    public static class Builder{
+    public static class Builder {
 
         private transient String nome;
         private transient double valor;
@@ -180,7 +206,7 @@ public class Produto {
             return this;
         }
 
-        public Produto build(){
+        public Produto build() {
             return new Produto(this);
         }
     }
@@ -223,5 +249,9 @@ public class Produto {
 
     public List<Imagem> getListaImagens() {
         return listaImagens;
+    }
+
+    public List<Opniao> getOpnioes() {
+        return opnioes;
     }
 }

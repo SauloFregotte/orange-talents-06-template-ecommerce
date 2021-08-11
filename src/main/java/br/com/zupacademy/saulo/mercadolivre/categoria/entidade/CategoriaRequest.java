@@ -10,10 +10,7 @@ public class CategoriaRequest {
 
     public CategoriaResponse cadastrar(final RepositoryCategoriaJPA repositoryCategoriaJPA){
         Categoria categoria = new Categoria(nome).cadastrar(repositoryCategoriaJPA, nomeCategoriaMae);
-        return new CategoriaResponse(
-                categoria.getId(),
-                categoria.getNome()
-        );
+        return new CategoriaResponse(categoria);
     }
 
     public void setNome(final String nome) {

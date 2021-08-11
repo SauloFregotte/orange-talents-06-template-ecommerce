@@ -2,7 +2,6 @@ package br.com.zupacademy.saulo.mercadolivre.security;
 
 import br.com.zupacademy.saulo.mercadolivre.security.autenticacaoendpoint.TokenServices;
 import br.com.zupacademy.saulo.mercadolivre.usuario.RepositoryUsuarioJPA;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -45,22 +44,19 @@ public class Security extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         System.out.println("CONFIGURANDO AUTORIZAÇÃO");
-        /**
-         * .formLogin() é um método que cria uma Session guardando o estado dessa Session (StateFull),
-         * que vai contra os princípios da arquitetura Rest (StateLess), logo foi trocado pelo método
-         * sessionCreationPolicy(SessionCreationPolicy.STATELESS),
-         * onde eu defino que não devem ser criadas sessões
-         *
-         * Lembrar de tirar os end-points do metodo abaixo,
-         * pois estou deixando eles publicos para acesso,
-         * invalidando assim a razão de ter feito o token de acesso.
-         * */
+        /*
+          .formLogin() é um método que cria uma Session guardando o estado dessa Session (StateFull),
+          que vai contra os princípios da arquitetura Rest (StateLess), logo foi trocado pelo método
+          sessionCreationPolicy(SessionCreationPolicy.STATELESS),
+          onde eu defino que não devem ser criadas sessões
+
+          Lembrar de tirar os end-points do metodo abaixo,
+          pois estou deixando eles publicos para acesso,
+          invalidando assim a razão de ter feito o token de acesso.
+          */
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
-//                .antMatchers(HttpMethod.POST, "/cadastrar-categoria").permitAll()
-//                .antMatchers(HttpMethod.POST, "/cadastrar-produto/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/cadastro-imagens/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth-login").permitAll()
+                .antMatchers(HttpMethod.POST, "/cadastrar-usuario").permitAll()
                 .anyRequest()
                 .authenticated()
         .and()

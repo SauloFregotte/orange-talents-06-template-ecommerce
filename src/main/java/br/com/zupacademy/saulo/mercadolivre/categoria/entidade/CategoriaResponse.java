@@ -1,20 +1,22 @@
 package br.com.zupacademy.saulo.mercadolivre.categoria.entidade;
 
 public class CategoriaResponse {
-    public CategoriaResponse(final Long id, final String nome) {
-        this.id = id;
-        this.nome = nome;
+    public CategoriaResponse(Categoria categoria) {
+        this.categoria = categoria;
     }
 
-    private Long id;
-    private String nome;
-    private String nomeCategoriaMae;
+    private Categoria categoria;
+
 
     public Long getId() {
-        return id;
+        return categoria.getId();
     }
 
     public String getNome() {
-        return nome;
+        return categoria.getNome();
+    }
+
+    public String getNomeCategoriaMae() {
+        return categoria.getCategoriaMae();
     }
 }

@@ -18,7 +18,8 @@ public class ImagemRequest {
     @NotNull
     private List<String> listaImagens = new ArrayList<>();
 
-    public ProdutoResponse associarImagemProduto(RepositoryProdutoJPA repositoryProdutoJPA, Usuario userLogged, Produto produto) {
+    public ProdutoResponse associarImagemProduto(RepositoryProdutoJPA repositoryProdutoJPA,
+                                                 Usuario userLogged, Produto produto) {
         verifyIfProdutoBelongsToUser(userLogged, produto);
         produto.associarImagens(listaImagens);
         return new ProdutoResponse(produto.cadastrar(repositoryProdutoJPA));
@@ -26,7 +27,8 @@ public class ImagemRequest {
 
     private void verifyIfProdutoBelongsToUser(Usuario userLogged, Produto produto) {
         if(!userLogged.equals(produto.getUsuario()))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esse produto não pertence ao usuario logado");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Esse produto não pertence ao usuario logado");
     }
 
     public void setListaImagens(List<String> listaImagens) {

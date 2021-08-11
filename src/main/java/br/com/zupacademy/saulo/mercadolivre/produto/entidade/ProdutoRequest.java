@@ -23,7 +23,9 @@ public class ProdutoRequest {
     private String categoria;
     private List<Caracteristicas> caracteristicas;
 
-    public ProdutoResponse cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA, final RepositoryCategoriaJPA repositoryCategoriaJPA, final Usuario userLogged){
+    public ProdutoResponse cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA,
+                                     final RepositoryCategoriaJPA repositoryCategoriaJPA,
+                                     final Usuario userLogged){
 
         return new ProdutoResponse(
                 Produto.builder()
