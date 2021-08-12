@@ -1,5 +1,6 @@
 package br.com.zupacademy.saulo.mercadolivre.pergunta;
 
+import br.com.zupacademy.saulo.mercadolivre.config.EmailFakeVendedor;
 import br.com.zupacademy.saulo.mercadolivre.pergunta.entidade.PerguntaRequest;
 import br.com.zupacademy.saulo.mercadolivre.pergunta.entidade.PerguntaResponse;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;

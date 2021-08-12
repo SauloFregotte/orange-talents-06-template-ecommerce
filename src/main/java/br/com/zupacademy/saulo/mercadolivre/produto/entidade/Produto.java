@@ -2,6 +2,7 @@ package br.com.zupacademy.saulo.mercadolivre.produto.entidade;
 
 import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
 import br.com.zupacademy.saulo.mercadolivre.config.EntityException;
+import br.com.zupacademy.saulo.mercadolivre.config.QuantidadeNaoPodeSerAbatidaException;
 import br.com.zupacademy.saulo.mercadolivre.opniao.entidade.Opniao;
 import br.com.zupacademy.saulo.mercadolivre.pergunta.entidade.Pergunta;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
@@ -31,7 +32,7 @@ public class Produto {
     public Produto(Builder builder) {
         this.nome = builder.nome;
         this.valor = builder.valor;
-        this.quantidade = builder.quantidade;
+        this.quantidadeNoEstoque = builder.quantidade;
         this.descricao = builder.descricao;
         this.categoria = builder.categoria;
         //Não bom, um rato, para se construir, precisa de um milagre divino (metodo de construcao)
@@ -59,7 +60,7 @@ public class Produto {
     private double valor;
 
     @NotNull
-    private int quantidade;
+    private int quantidadeNoEstoque;
 
     @NotBlank
     private String descricao;
@@ -109,10 +110,10 @@ public class Produto {
 
     private void verifyIfTheInsertingProdutoIsExactlyTheSameAsOneAlreadyInserted(final RepositoryProdutoJPA repositoryProdutoJPA) {
         repositoryProdutoJPA
-                .findFirstByNomeAndValorAndQuantidadeAndDescricao(
+                .findFirstByNomeAndValorAndQuantidadeNoEstoqueAndDescricao(
                         this.nome,
                         this.valor,
-                        this.quantidade,
+                        this.quantidadeNoEstoque,
                         this.descricao
                 )
                 .ifPresent(
@@ -152,13 +153,22 @@ public class Produto {
         return listaOpnioes.size();
     }
 
+    public void abaterEstoque(final RepositoryProdutoJPA repositoryProdutoJPA, final int quantidade){
+        if( !(quantidade <= quantidadeNoEstoque) )
+            throw new QuantidadeNaoPodeSerAbatidaException(
+                            "A quantidade { " + quantidade + " } " +
+                                    "do produto { " + nome + " } não pode ser abatida.");
+        quantidadeNoEstoque -= quantidade;
+        cadastrar(repositoryProdutoJPA);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Produto produto = (Produto) o;
         return Double.compare(produto.valor, valor) == 0 &&
-                quantidade == produto.quantidade &&
+                quantidadeNoEstoque == produto.quantidadeNoEstoque &&
                 Objects.equals(id, produto.id) &&
                 Objects.equals(nome, produto.nome) &&
                 Objects.equals(descricao, produto.descricao) &&
@@ -174,7 +184,7 @@ public class Produto {
         return Objects.hash(id,
                 nome,
                 valor,
-                quantidade,
+                quantidadeNoEstoque,
                 descricao,
                 localDateTime,
                 usuario,
@@ -245,8 +255,8 @@ public class Produto {
         return valor;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    public int getQuantidadeNoEstoque() {
+        return quantidadeNoEstoque;
     }
 
     public String getDescricao() {

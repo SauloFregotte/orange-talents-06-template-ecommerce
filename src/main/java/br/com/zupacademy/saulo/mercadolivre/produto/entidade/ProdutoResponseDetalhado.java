@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre.produto;
+package br.com.zupacademy.saulo.mercadolivre.produto.entidade;
 
 import br.com.zupacademy.saulo.mercadolivre.produto.entidade.Produto;
 

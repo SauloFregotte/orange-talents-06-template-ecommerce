@@ -4,6 +4,7 @@ import br.com.zupacademy.saulo.mercadolivre.categoria.RepositoryCategoriaJPA;
 import br.com.zupacademy.saulo.mercadolivre.produto.entidade.Produto;
 import br.com.zupacademy.saulo.mercadolivre.produto.entidade.ProdutoRequest;
 import br.com.zupacademy.saulo.mercadolivre.produto.entidade.ProdutoResponse;
+import br.com.zupacademy.saulo.mercadolivre.produto.entidade.ProdutoResponseDetalhado;
 import br.com.zupacademy.saulo.mercadolivre.produto.imagens.ImagemRequest;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 import org.springframework.http.HttpStatus;

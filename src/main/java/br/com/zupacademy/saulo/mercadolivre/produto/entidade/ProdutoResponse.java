@@ -15,7 +15,7 @@ public class ProdutoResponse {
         id = produto.getId();
         nome = produto.getNome();
         valor = produto.getValor();
-        quantidade = produto.getQuantidade();
+        quantidade = produto.getQuantidadeNoEstoque();
         descricao = produto.getDescricao();
         localDateTime = produto.getLocalDateTime();
         categoria = produto.getCategoria();
