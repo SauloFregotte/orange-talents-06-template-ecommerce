@@ -23,10 +23,10 @@ public class PerguntaResponse {
     }
 
     public String emailDeQuemPerguntou() {
-        return pergunta.getUsuario().getEmail();
+        return pergunta.getEmailDeQuemPErguntou();
     }
 
     public String emailDoVendedor() {
-        return pergunta.getProduto().getUsuario().getEmail();
+        return pergunta.getVendedor();
     }
 }

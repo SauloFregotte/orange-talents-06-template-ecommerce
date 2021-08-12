@@ -56,11 +56,19 @@ public class Pergunta {
         return localDateTime;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Long getProduto() {
+        return produto.getId();
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getVendedor() {
+        return produto.getUsuario().getEmail();
+    }
+
+    public Long getUsuario() {
+        return usuario.getId();
+    }
+
+    public String getEmailDeQuemPErguntou() {
+        return usuario.getEmail();
     }
 }

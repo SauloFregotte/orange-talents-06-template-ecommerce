@@ -7,6 +7,7 @@ import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class ProdutoResponse {
 
@@ -30,7 +31,7 @@ public class ProdutoResponse {
     private String descricao;
     private LocalDateTime localDateTime;
 
-    private List<Imagem> listaImagens;
+    private Set<Imagem> listaImagens;
 
     private Categoria categoria;
     private List<Caracteristicas> caracteristicas;
@@ -72,7 +73,7 @@ public class ProdutoResponse {
         return usuario.getId();
     }
 
-    public List<Imagem> getListaImagens() {
+    public Set<Imagem> getListaImagens() {
         return listaImagens;
     }
 }

@@ -1,6 +1,7 @@
 package br.com.zupacademy.saulo.mercadolivre.produto;
 
 import br.com.zupacademy.saulo.mercadolivre.categoria.RepositoryCategoriaJPA;
+import br.com.zupacademy.saulo.mercadolivre.produto.entidade.Produto;
 import br.com.zupacademy.saulo.mercadolivre.produto.entidade.ProdutoRequest;
 import br.com.zupacademy.saulo.mercadolivre.produto.entidade.ProdutoResponse;
 import br.com.zupacademy.saulo.mercadolivre.produto.imagens.ImagemRequest;
@@ -42,5 +43,11 @@ public class ProdutoController {
                 repositoryProdutoJPA,
                 userLogged,
                 repositoryProdutoJPA.getById(id));
+    }
+
+    @GetMapping("/produto/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProdutoResponseDetalhado obterInformacoesProdutoDetalhadas(@PathVariable Long id){
+        return new ProdutoResponseDetalhado(Produto.obterInformacoes(id, repositoryProdutoJPA));
     }
 }

@@ -2,6 +2,8 @@ package br.com.zupacademy.saulo.mercadolivre.produto.entidade;
 
 import br.com.zupacademy.saulo.mercadolivre.categoria.entidade.Categoria;
 import br.com.zupacademy.saulo.mercadolivre.config.EntityException;
+import br.com.zupacademy.saulo.mercadolivre.opniao.entidade.Opniao;
+import br.com.zupacademy.saulo.mercadolivre.pergunta.entidade.Pergunta;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
 import br.com.zupacademy.saulo.mercadolivre.produto.caracteristicas.Caracteristicas;
 import br.com.zupacademy.saulo.mercadolivre.produto.imagens.Imagem;
@@ -11,9 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -21,6 +21,11 @@ public class Produto {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public static Produto obterInformacoes(Long id, RepositoryProdutoJPA repositoryProdutoJPA) {
+        return repositoryProdutoJPA.findById(id)
+                .orElseThrow(()->{throw new EntityException("O produto não existe!");});
     }
 
     public Produto(Builder builder) {
@@ -74,8 +79,17 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
     private List<Caracteristicas> caracteristicas;
 
+    @NotNull
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
-    private final List<Imagem> listaImagens = new ArrayList<>();
+    private final Set<Imagem> listaImagens = new HashSet<>();
+
+    @NotNull
+    @OneToMany(mappedBy = "produto")
+    private List<Opniao> listaOpnioes;
+
+    @NotNull
+    @OneToMany(mappedBy = "produto")
+    private List<Pergunta> listaPerguntas;
 
     public Produto cadastrar(final RepositoryProdutoJPA repositoryProdutoJPA) {
         /*Este If é necessario para o caso de vc estiver trazendo
@@ -121,8 +135,21 @@ public class Produto {
                                 .map(
                                         imagemLinkString -> new Imagem(imagemLinkString, this)
                                 )
-                                .collect(Collectors.toList())
+                                .collect(Collectors.toSet())
                 );
+    }
+
+    public Double calcularMedia() {
+        final Optional<Double> reduce = listaOpnioes
+                .stream()
+                .map(Opniao::getNota)
+                .reduce(Double::sum);
+        if( reduce.isEmpty() ) return 0.0;
+        return reduce.get() /listaOpnioes.size();
+    }
+
+    public Integer totalNotas() {
+        return listaOpnioes.size();
     }
 
     @Override
@@ -242,7 +269,15 @@ public class Produto {
         return usuario;
     }
 
-    public List<Imagem> getListaImagens() {
+    public Set<Imagem> getListaImagens() {
         return listaImagens;
+    }
+
+    public List<Opniao> getListaOpnioes() {
+        return listaOpnioes;
+    }
+
+    public List<Pergunta> getListaPerguntas() {
+        return listaPerguntas;
     }
 }
