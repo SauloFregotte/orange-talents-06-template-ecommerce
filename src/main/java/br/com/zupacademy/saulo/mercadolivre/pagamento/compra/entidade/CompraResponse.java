@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre.pagamento.entidade;
+package br.com.zupacademy.saulo.mercadolivre.pagamento.compra.entidade;
 
 public class CompraResponse {
 

@@ -1,7 +1,7 @@
-package br.com.zupacademy.saulo.mercadolivre.pagamento.entidade;
+package br.com.zupacademy.saulo.mercadolivre.pagamento.compra.entidade;
 
 import br.com.zupacademy.saulo.mercadolivre.pagamento.GatewayPagamento;
-import br.com.zupacademy.saulo.mercadolivre.pagamento.RepositoryCompraJPA;
+import br.com.zupacademy.saulo.mercadolivre.pagamento.compra.RepositoryCompraJPA;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
 

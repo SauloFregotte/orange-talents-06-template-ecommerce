@@ -1,4 +1,4 @@
-package br.com.zupacademy.saulo.mercadolivre.pagamento;
+package br.com.zupacademy.saulo.mercadolivre.pagamento.compra;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class CadastroPagamentoTest {
+public class CadastroCompraTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,11 +42,11 @@ public class CadastroPagamentoTest {
                 .getContentAsString(), "$.token");
     }
 
-    private String json(){
+    private String json(String tipoDePagamento){
         return "{\n" +
                 "    \"quantidade\":3,\n" +
                 "    \"produto\":1,\n" +
-                "    \"tipoDePagamento\":\"PAY_PAL\"\n" +
+                "    \"tipoDePagamento\":\"" + tipoDePagamento + "\"\n" +
                 "}";
     }
 
@@ -57,14 +57,34 @@ public class CadastroPagamentoTest {
             "Insert into caracteristicas Values (1, 'Teste descricao1', 'nome1',1)",
             "Insert into caracteristicas Values (2, 'Teste descricao2', 'nome2',1)",
             "Insert into caracteristicas Values (3, 'Teste descricao3', 'nome3',1)"})
-    public void cadastroCompraComSucesso() throws Exception {
+    public void cadastroCompraPaypalComSucesso() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders
                         .post(CADASTRAR_COMPRA_PRODUTO_ENDPOINT)
                         .header("Authorization", "Bearer " + bearerToken)
-                        .content(json())
+                        .content(json("PAY_PAL"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.compra.id").value(1L));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.compra.id").value(1L))
+                .andExpect( MockMvcResultMatchers.jsonPath("$.gatewayPagamento").value("paypal.com?buyerId=1&redirectUrl=/paypal/1") );
+    }
+
+    @Test
+    @Sql(statements = {"Insert into usuario Values (1,'lulo123@gmail.com', '2017-01-16 00:00:00', '$2a$10$mCxKN/mh2ootRbx0PVnqye3mQhacpUebaQHm01YuIivKsug3ox7BS')",
+            "Insert into categoria values (1, 'testeCategoria', null)",
+            "Insert into produto values (1, 'descricao produto', '2017-01-16 00:00:00', 'nomeProduto', 23, 50.00, 1, 1)",
+            "Insert into caracteristicas Values (1, 'Teste descricao1', 'nome1',1)",
+            "Insert into caracteristicas Values (2, 'Teste descricao2', 'nome2',1)",
+            "Insert into caracteristicas Values (3, 'Teste descricao3', 'nome3',1)"})
+    public void cadastroCompraPagueseguroComSucesso() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post(CADASTRAR_COMPRA_PRODUTO_ENDPOINT)
+                        .header("Authorization", "Bearer " + bearerToken)
+                        .content(json("PAG_SEGURO"))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.compra.id").value(1L))
+                .andExpect( MockMvcResultMatchers.jsonPath("$.gatewayPagamento").value("pagseguro.com?returnId=1&redirectUrl=/pagseguro/1") );
     }
 }

@@ -1,7 +1,7 @@
-package br.com.zupacademy.saulo.mercadolivre.pagamento;
+package br.com.zupacademy.saulo.mercadolivre.pagamento.compra;
 
-import br.com.zupacademy.saulo.mercadolivre.pagamento.entidade.CompraRequest;
-import br.com.zupacademy.saulo.mercadolivre.pagamento.entidade.CompraResponse;
+import br.com.zupacademy.saulo.mercadolivre.pagamento.compra.entidade.CompraRequest;
+import br.com.zupacademy.saulo.mercadolivre.pagamento.compra.entidade.CompraResponse;
 import br.com.zupacademy.saulo.mercadolivre.config.EmailFakeVendedor;
 import br.com.zupacademy.saulo.mercadolivre.produto.RepositoryProdutoJPA;
 import br.com.zupacademy.saulo.mercadolivre.usuario.entidade.Usuario;
